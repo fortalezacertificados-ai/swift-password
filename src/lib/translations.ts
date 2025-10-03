@@ -17,7 +17,16 @@ export const translations = {
       "Avoid common words or patterns",
       "Never reuse passwords across different sites",
       "Consider using a password manager"
-    ]
+    ],
+    guideTitle: "How to Create a Secure Password",
+    whatIsSecurePassword: "What is a Secure Password?",
+    whatIsSecurePasswordText: "A secure password is a unique combination of characters that is difficult for others to guess or crack. It should be long enough (at least 12 characters), contain a mix of uppercase and lowercase letters, numbers, and special symbols. The more random and complex, the better the protection against brute force attacks and dictionary attacks.",
+    howToCreate: "How to Create One",
+    howToCreateText: "Start with a phrase you remember, then transform it using numbers and symbols. For example, 'I love pizza' becomes 'iL0v3P!zz@2024'. Mix uppercase, lowercase, numbers, and special characters throughout. Avoid personal information like birthdays or names that hackers can easily find on social media.",
+    commonMistakes: "Common Mistakes to Avoid",
+    commonMistakesText: "Never use simple passwords like '123456' or 'password'. Avoid using the same password across multiple sites. Do not use personal information such as your name, birthday, or pet names. Avoid keyboard patterns like 'qwerty' or 'asdfgh'. These are the first combinations attackers will try.",
+    bestPractices: "Best Practices",
+    bestPracticesText: "Use a different password for each important account. Enable two-factor authentication whenever possible. Use a reputable password manager to store your passwords securely. Change passwords regularly, especially if you suspect a breach. Never share your passwords via email or text message."
   },
   es: {
     title: "Generador de Contraseñas",
@@ -37,7 +46,16 @@ export const translations = {
       "Evita palabras comunes o patrones",
       "Nunca reutilices contraseñas en diferentes sitios",
       "Considera usar un gestor de contraseñas"
-    ]
+    ],
+    guideTitle: "Cómo Crear una Contraseña Segura",
+    whatIsSecurePassword: "¿Qué es una Contraseña Segura?",
+    whatIsSecurePasswordText: "Una contraseña segura es una combinación única de caracteres difícil de adivinar o descifrar. Debe tener al menos 12 caracteres y contener una mezcla de letras mayúsculas, minúsculas, números y símbolos especiales. Cuanto más aleatoria y compleja, mejor protección contra ataques de fuerza bruta.",
+    howToCreate: "Cómo Crearla",
+    howToCreateText: "Comienza con una frase que recuerdes, luego transfórmala usando números y símbolos. Por ejemplo, 'Me encanta la pizza' se convierte en 'M3Enc@nt@P!zz@2024'. Mezcla mayúsculas, minúsculas, números y caracteres especiales. Evita información personal como fechas de nacimiento o nombres.",
+    commonMistakes: "Errores Comunes a Evitar",
+    commonMistakesText: "Nunca uses contraseñas simples como '123456' o 'contraseña'. Evita usar la misma contraseña en múltiples sitios. No uses información personal como tu nombre, cumpleaños o nombres de mascotas. Evita patrones de teclado como 'qwerty'. Estas son las primeras combinaciones que los atacantes probarán.",
+    bestPractices: "Mejores Prácticas",
+    bestPracticesText: "Usa una contraseña diferente para cada cuenta importante. Activa la autenticación de dos factores siempre que sea posible. Usa un gestor de contraseñas confiable. Cambia las contraseñas regularmente, especialmente si sospechas una violación. Nunca compartas tus contraseñas por correo electrónico o mensaje de texto."
   },
   fr: {
     title: "Générateur de Mot de Passe",
@@ -57,7 +75,16 @@ export const translations = {
       "Évitez les mots courants ou les motifs",
       "Ne réutilisez jamais les mots de passe sur différents sites",
       "Envisagez d'utiliser un gestionnaire de mots de passe"
-    ]
+    ],
+    guideTitle: "Comment Créer un Mot de Passe Sécurisé",
+    whatIsSecurePassword: "Qu'est-ce qu'un Mot de Passe Sécurisé?",
+    whatIsSecurePasswordText: "Un mot de passe sécurisé est une combinaison unique de caractères difficile à deviner ou à déchiffrer. Il doit comporter au moins 12 caractères et contenir un mélange de lettres majuscules, minuscules, chiffres et symboles spéciaux. Plus il est aléatoire et complexe, meilleure est la protection contre les attaques par force brute.",
+    howToCreate: "Comment le Créer",
+    howToCreateText: "Commencez par une phrase dont vous vous souvenez, puis transformez-la en utilisant des chiffres et des symboles. Par exemple, 'J'adore la pizza' devient 'J@d0r3L@P!zz@2024'. Mélangez majuscules, minuscules, chiffres et caractères spéciaux. Évitez les informations personnelles comme les dates de naissance ou les noms.",
+    commonMistakes: "Erreurs Courantes à Éviter",
+    commonMistakesText: "N'utilisez jamais de mots de passe simples comme '123456' ou 'motdepasse'. Évitez d'utiliser le même mot de passe sur plusieurs sites. N'utilisez pas d'informations personnelles comme votre nom, date de naissance ou noms d'animaux. Évitez les motifs de clavier comme 'azerty'. Ce sont les premières combinaisons que les attaquants essaieront.",
+    bestPractices: "Meilleures Pratiques",
+    bestPracticesText: "Utilisez un mot de passe différent pour chaque compte important. Activez l'authentification à deux facteurs chaque fois que possible. Utilisez un gestionnaire de mots de passe réputé. Changez vos mots de passe régulièrement, surtout si vous soupçonnez une violation. Ne partagez jamais vos mots de passe par email ou SMS."
   },
   de: {
     title: "Passwort-Generator",
@@ -77,7 +104,16 @@ export const translations = {
       "Vermeiden Sie gebräuchliche Wörter oder Muster",
       "Verwenden Sie niemals dasselbe Passwort auf verschiedenen Websites",
       "Erwägen Sie die Verwendung eines Passwort-Managers"
-    ]
+    ],
+    guideTitle: "So Erstellen Sie ein Sicheres Passwort",
+    whatIsSecurePassword: "Was ist ein Sicheres Passwort?",
+    whatIsSecurePasswordText: "Ein sicheres Passwort ist eine einzigartige Zeichenkombination, die schwer zu erraten oder zu knacken ist. Es sollte mindestens 12 Zeichen lang sein und eine Mischung aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten. Je zufälliger und komplexer, desto besser der Schutz gegen Brute-Force-Angriffe.",
+    howToCreate: "So Erstellen Sie Eines",
+    howToCreateText: "Beginnen Sie mit einem Satz, den Sie sich merken, und transformieren Sie ihn mit Zahlen und Symbolen. Zum Beispiel wird 'Ich liebe Pizza' zu 'IchL!3b3P!zz@2024'. Mischen Sie Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Vermeiden Sie persönliche Informationen wie Geburtstage oder Namen.",
+    commonMistakes: "Häufige Fehler Vermeiden",
+    commonMistakesText: "Verwenden Sie niemals einfache Passwörter wie '123456' oder 'passwort'. Vermeiden Sie die Verwendung desselben Passworts auf mehreren Websites. Verwenden Sie keine persönlichen Informationen wie Ihren Namen, Geburtstag oder Haustiernamen. Vermeiden Sie Tastaturmuster wie 'qwertz'. Das sind die ersten Kombinationen, die Angreifer ausprobieren werden.",
+    bestPractices: "Beste Praktiken",
+    bestPracticesText: "Verwenden Sie für jedes wichtige Konto ein anderes Passwort. Aktivieren Sie die Zwei-Faktor-Authentifizierung, wann immer möglich. Verwenden Sie einen vertrauenswürdigen Passwort-Manager. Ändern Sie Passwörter regelmäßig, besonders wenn Sie eine Sicherheitsverletzung vermuten. Teilen Sie niemals Ihre Passwörter per E-Mail oder SMS."
   },
   pt: {
     title: "Gerador de Senhas",
@@ -97,7 +133,16 @@ export const translations = {
       "Evite palavras comuns ou padrões",
       "Nunca reutilize senhas em sites diferentes",
       "Considere usar um gerenciador de senhas"
-    ]
+    ],
+    guideTitle: "Como Criar uma Senha Segura",
+    whatIsSecurePassword: "O que é uma Senha Segura?",
+    whatIsSecurePasswordText: "Uma senha segura é uma combinação única de caracteres que é difícil para outros adivinhar ou decifrar. Deve ter pelo menos 12 caracteres e conter uma mistura de letras maiúsculas, minúsculas, números e símbolos especiais. Quanto mais aleatória e complexa, melhor a proteção contra ataques de força bruta e ataques de dicionário.",
+    howToCreate: "Como Criar Uma",
+    howToCreateText: "Comece com uma frase que você se lembra, depois transforme usando números e símbolos. Por exemplo, 'Eu amo pizza' se torna 'Eu@m0P!zz@2024'. Misture maiúsculas, minúsculas, números e caracteres especiais. Evite informações pessoais como datas de nascimento ou nomes que hackers podem facilmente encontrar nas redes sociais.",
+    commonMistakes: "Erros Comuns a Evitar",
+    commonMistakesText: "Nunca use senhas simples como '123456' ou 'senha'. Evite usar a mesma senha em vários sites. Não use informações pessoais como seu nome, aniversário ou nomes de animais de estimação. Evite padrões de teclado como 'qwerty' ou 'asdfgh'. Essas são as primeiras combinações que os atacantes vão tentar.",
+    bestPractices: "Melhores Práticas",
+    bestPracticesText: "Use uma senha diferente para cada conta importante. Ative a autenticação de dois fatores sempre que possível. Use um gerenciador de senhas confiável para armazenar suas senhas com segurança. Mude as senhas regularmente, especialmente se suspeitar de uma violação. Nunca compartilhe suas senhas por email ou mensagem de texto."
   }
 };
 

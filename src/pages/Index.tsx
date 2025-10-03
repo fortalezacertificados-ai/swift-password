@@ -2,6 +2,8 @@ import { useState } from "react";
 import PasswordGenerator from "@/components/PasswordGenerator";
 import SecurityTips from "@/components/SecurityTips";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import HeroSection from "@/components/HeroSection";
+import PasswordGuide from "@/components/PasswordGuide";
 import { translations, Language } from "@/lib/translations";
 
 const Index = () => {
@@ -20,8 +22,26 @@ const Index = () => {
           />
         </header>
 
+        {/* Hero Section */}
+        <HeroSection title={t.title} subtitle={t.subtitle} />
+
+        {/* Password Guide Section */}
+        <PasswordGuide
+          translations={{
+            guideTitle: t.guideTitle,
+            whatIsSecurePassword: t.whatIsSecurePassword,
+            whatIsSecurePasswordText: t.whatIsSecurePasswordText,
+            howToCreate: t.howToCreate,
+            howToCreateText: t.howToCreateText,
+            commonMistakes: t.commonMistakes,
+            commonMistakesText: t.commonMistakesText,
+            bestPractices: t.bestPractices,
+            bestPracticesText: t.bestPracticesText,
+          }}
+        />
+
         {/* Main Content */}
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
+        <div className="grid lg:grid-cols-3 gap-8 items-start mb-16">
           <div className="lg:col-span-2">
             <PasswordGenerator
               translations={{
@@ -50,8 +70,9 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <footer className="mt-16 text-center text-muted-foreground text-sm animate-fade-in">
+        <footer className="mt-16 text-center text-muted-foreground text-sm animate-fade-in border-t border-border pt-8">
           <p>© 2025 Password Generator. All passwords are generated locally in your browser.</p>
+          <p className="mt-2 text-xs">Your security is our priority. No data is stored or transmitted.</p>
         </footer>
       </div>
     </main>

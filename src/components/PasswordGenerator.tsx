@@ -65,18 +65,6 @@ const PasswordGenerator = ({ translations }: PasswordGeneratorProps) => {
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-8">
-      <div className="text-center space-y-4 animate-fade-in">
-        <div className="inline-flex items-center justify-center p-3 bg-gradient-primary rounded-2xl mb-4 animate-glow">
-          <Shield className="w-8 h-8 text-white" />
-        </div>
-        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-          {translations.title}
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-lg mx-auto">
-          {translations.subtitle}
-        </p>
-      </div>
-
       <Card className="p-8 space-y-6 backdrop-blur-sm bg-card/50 border-primary/20 animate-slide-up">
         {/* Password Display */}
         <div className="relative">
