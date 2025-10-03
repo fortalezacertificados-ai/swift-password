@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Shield } from "lucide-react";
 import PasswordGenerator from "@/components/PasswordGenerator";
 import SecurityTips from "@/components/SecurityTips";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -14,8 +16,15 @@ const Index = () => {
   return (
     <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header with Language Switcher */}
-        <header className="flex justify-end mb-8 animate-fade-in">
+        {/* Header with Navigation */}
+        <header className="flex justify-between items-center mb-8 animate-fade-in">
+          <Link 
+            to="/strength-checker" 
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+          >
+            <Shield className="w-5 h-5" />
+            <span className="font-medium">{t.strengthCheckerLink}</span>
+          </Link>
           <LanguageSwitcher
             currentLanguage={language}
             onLanguageChange={(lang) => setLanguage(lang as Language)}
