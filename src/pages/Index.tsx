@@ -10,8 +10,15 @@ import { translations, Language } from "@/lib/translations";
 
 const Index = () => {
   const [language, setLanguage] = useState<Language>("en");
+  const [copied, setCopied] = useState<string | null>(null);
 
   const t = translations[language];
+
+  const handleCopy = (address: string, coin: string) => {
+    navigator.clipboard.writeText(address);
+    setCopied(`${coin} address copied!`);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   return (
     <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
@@ -82,6 +89,67 @@ const Index = () => {
         <footer className="mt-16 text-center text-muted-foreground text-sm animate-fade-in border-t border-border pt-8">
           <p>© 2025 Password Generator. All passwords are generated locally in your browser.</p>
           <p className="mt-2 text-xs">Your security is our priority. No data is stored or transmitted.</p>
+
+          {/* Donate Section */}
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <p className="font-medium text-foreground">Donate to support this project 💙</p>
+            
+            <div className="flex flex-wrap justify-center gap-3">
+              {/* BTC */}
+              <button
+                onClick={() => handleCopy("1DFPKXMbfbjdGjWUwkBiX2EEGa45ZhuTYj", "BTC")}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
+              >
+                {/* Bitcoin Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                  <circle cx="16" cy="16" r="16" fill="#f7931a"/>
+                  <path d="M17.6 17.7c.2 1.5-2.2 2-3 2.2l.6 2.5-1.4.3-.6-2.4c-.4.1-.9.2-1.3.3l.6 2.5-1.4.3-.6-2.5-2 .5-.4-1.5 1.9-.5-.9-3.5-2 .5-.4-1.5 2-.5-.6-2.5 1.4-.3.6 2.4c.4-.1.8-.2 1.2-.3l-.6-2.4 1.4-.3.6 2.4c2.3-.5 4.9-.4 5.3 1.8.2 1.1-.3 1.8-1.3 2.1.9.2 1.7.7 1.9 1.7z" fill="#fff"/>
+                </svg>
+                BTC
+              </button>
+
+              {/* SOL */}
+              <button
+                onClick={() => handleCopy("4RgbL64ZFmAH2LVD8EF9ZzuvvwEpRbLoUS3rPkNtGjXf", "SOL")}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
+              >
+                {/* Solana Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 397 311" className="w-5 h-5">
+                  <defs><linearGradient id="solana" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop stopColor="#9945FF" offset="0%"/><stop stopColor="#14F195" offset="100%"/>
+                  </linearGradient></defs>
+                  <path d="M64.8 237.9c2.1-2.1 4.9-3.3 7.9-3.3h317.8c6.6 0 9.9 8 5.2 12.7l-68.6 68.9c-2.1 2.1-4.9 3.3-7.9 3.3H1.4c-6.6 0-9.9-8-5.2-12.7l68.6-68.9zM64.8 4.2c2.1-2.1 4.9-3.3 7.9-3.3h317.8c6.6 0 9.9 8 5.2 12.7l-68.6 68.9c-2.1 2.1-4.9 3.3-7.9 3.3H1.4c-6.6 0-9.9-8-5.2-12.7L64.8 4.2zM332.1 121c2.1-2.1 4.9-3.3 7.9-3.3H397c6.6 0 9.9 8 5.2 12.7l-68.6 68.9c-2.1 2.1-4.9 3.3-7.9 3.3H13.3c-6.6 0-9.9-8-5.2-12.7L332.1 121z" fill="url(#solana)"/>
+                </svg>
+                SOL
+              </button>
+
+              {/* ETH */}
+              <button
+                onClick={() => handleCopy("0x6585bC3996d5D4594e26bd8909c55661440d26F6", "ETH")}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
+              >
+                {/* Ethereum Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 417" className="w-5 h-5">
+                  <polygon fill="#343434" points="127.9,0 124.5,12.1 124.5,279.1 127.9,282.5 255.8,209.7"/>
+                  <polygon fill="#8C8C8C" points="127.9,0 0,209.7 127.9,282.5 127.9,150.4"/>
+                  <polygon fill="#3C3C3B" points="127.9,306.7 125.9,309.1 125.9,412.6 127.9,417 255.9,234.1"/>
+                  <polygon fill="#8C8C8C" points="127.9,417 127.9,306.7 0,234.1"/>
+                </svg>
+                ETH
+              </button>
+            </div>
+
+            <p className="text-xs text-muted-foreground mt-2">
+              Click a button to copy wallet address
+            </p>
+          </div>
+
+          {/* Toast Notification */}
+          {copied && (
+            <div className="fixed bottom-5 right-5 bg-primary text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in">
+              {copied}
+            </div>
+          )}
         </footer>
       </div>
     </main>
