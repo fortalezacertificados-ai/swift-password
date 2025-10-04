@@ -6,6 +6,8 @@ import SecurityTips from "@/components/SecurityTips";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import HeroSection from "@/components/HeroSection";
 import PasswordGuide from "@/components/PasswordGuide";
+import SEOHead from "@/components/SEOHead";
+import SchemaMarkup from "@/components/SchemaMarkup";
 import { translations, Language } from "@/lib/translations";
 
 const Index = () => {
@@ -21,8 +23,18 @@ const Index = () => {
   };
 
   return (
-    <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <SEOHead
+        title="Free Password Generator - Create Strong, Secure Passwords"
+        description="Generate ultra-secure random passwords instantly with our free tool. Test password strength, learn security best practices. Create unbreakable passwords in seconds - 100% client-side, private & safe."
+        keywords="password generator, password strength checker, secure password creator, random password generator, strong password maker, password security tool, free password generator"
+        canonical="https://passwordgencheck.com/"
+      />
+      <SchemaMarkup type="website" />
+      <SchemaMarkup type="faq" />
+      
+      <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-8 animate-fade-in">
           <div className="flex items-center gap-4">
@@ -98,6 +110,11 @@ const Index = () => {
         <footer className="mt-16 text-center text-muted-foreground text-sm animate-fade-in border-t border-border pt-8">
           <p>© 2025 Password Generator. All passwords are generated locally in your browser.</p>
           <p className="mt-2 text-xs">Your security is our priority. No data is stored or transmitted.</p>
+          <p className="mt-4">
+            <Link to="/cookie-policy" className="text-primary hover:underline text-xs">Cookie Policy</Link>
+            {" • "}
+            <Link to="/privacy-policy" className="text-primary hover:underline text-xs">Privacy Policy</Link>
+          </p>
 
           {/* Donate Section */}
           <div className="mt-6 flex flex-col items-center gap-3">
@@ -160,8 +177,9 @@ const Index = () => {
             </div>
           )}
         </footer>
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   );
 };
 

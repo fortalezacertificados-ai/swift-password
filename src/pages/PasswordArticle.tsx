@@ -1,13 +1,48 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Shield, Lock, Key, Database, Eye, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import SEOHead from "@/components/SEOHead";
+import SchemaMarkup from "@/components/SchemaMarkup";
 import passwordProtection from "@/assets/password-protection.jpg";
 import strongPassword from "@/assets/strong-password.jpg";
 
 const PasswordArticle = () => {
   return (
-    <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <>
+      <SEOHead
+        title="How to Create a Strong Password and Keep It Safe - Complete Guide 2025"
+        description="Learn how to create unbreakable passwords and store them securely. Expert tips on password managers, 2FA, and avoiding common security mistakes. Protect your digital life today."
+        keywords="how to create strong password, password security guide, password best practices, password manager recommendations, secure password storage, two-factor authentication, password safety tips"
+        canonical="https://passwordgencheck.com/password-guide"
+        ogType="article"
+        article={{
+          publishedTime: "2025-10-04T00:00:00Z",
+          modifiedTime: "2025-10-04T00:00:00Z",
+          author: "PasswordGenCheck Security Team"
+        }}
+      />
+      <SchemaMarkup 
+        type="article" 
+        data={{
+          headline: "How to Create a Strong Password and Keep It Safe",
+          description: "A comprehensive guide to password security in the digital age. Learn how to create strong passwords and store them securely.",
+          datePublished: "2025-10-04",
+          dateModified: "2025-10-04",
+          url: "https://passwordgencheck.com/password-guide"
+        }}
+      />
+      <SchemaMarkup 
+        type="breadcrumb" 
+        data={{
+          items: [
+            { name: "Home", url: "https://passwordgencheck.com/" },
+            { name: "Password Security Guide", url: "https://passwordgencheck.com/password-guide" }
+          ]
+        }}
+      />
+      
+      <main className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
         {/* Back Navigation */}
         <Link 
           to="/" 
@@ -474,8 +509,9 @@ const PasswordArticle = () => {
             </Link>
           </section>
         </article>
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   );
 };
 
