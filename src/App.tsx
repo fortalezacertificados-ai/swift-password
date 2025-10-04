@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import PasswordStrengthChecker from "./pages/PasswordStrengthChecker";
 import PasswordArticle from "./pages/PasswordArticle";
 import CookiePolicy from "./pages/CookiePolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/strength-checker" element={<PasswordStrengthChecker />} />
             <Route path="/password-guide" element={<PasswordArticle />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
