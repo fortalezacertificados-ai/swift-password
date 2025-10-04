@@ -25,13 +25,22 @@ const Index = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header with Navigation */}
         <header className="flex justify-between items-center mb-8 animate-fade-in">
-          <Link 
-            to="/strength-checker" 
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
-          >
-            <Shield className="w-5 h-5" />
-            <span className="font-medium">{t.strengthCheckerLink}</span>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link 
+              to="/strength-checker" 
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+            >
+              <Shield className="w-5 h-5" />
+              <span className="font-medium">{t.strengthCheckerLink}</span>
+            </Link>
+            <Link 
+              to="/password-guide" 
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+            >
+              <Shield className="w-5 h-5" />
+              <span className="font-medium">{t.articleLink}</span>
+            </Link>
+          </div>
           <LanguageSwitcher
             currentLanguage={language}
             onLanguageChange={(lang) => setLanguage(lang as Language)}
