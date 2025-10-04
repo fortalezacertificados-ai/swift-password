@@ -22,7 +22,7 @@ const Index = () => {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  // ⚡ Auto Ads: força o carregamento caso haja algum bloco manual no futuro
+  // ⚡ Inicializa blocos de AdSense
   useEffect(() => {
     try {
       // @ts-ignore
@@ -72,6 +72,18 @@ const Index = () => {
           {/* Hero Section */}
           <HeroSection title={t.title} subtitle={t.subtitle} />
 
+          {/* 🔹 Anúncio Square (manual) */}
+          <div className="w-full my-6">
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-9180151864858869"
+              data-ad-slot="6857910865"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+
           {/* Password Guide Section */}
           <PasswordGuide
             translations={{
@@ -113,7 +125,18 @@ const Index = () => {
                   tips: t.securityTips,
                 }}
               />
-              {/* ⚡ Se você quiser, aqui pode adicionar blocos manuais de AdSense no futuro */}
+
+              {/* 🔹 Anúncio Vertical (manual) */}
+              <div className="w-full my-6">
+                <ins
+                  className="adsbygoogle"
+                  style={{ display: "block" }}
+                  data-ad-client="ca-pub-9180151864858869"
+                  data-ad-slot="6119528354"
+                  data-ad-format="auto"
+                  data-full-width-responsive="true"
+                ></ins>
+              </div>
             </div>
           </div>
 
