@@ -116,10 +116,7 @@ const Articles = () => {
               </Card>
             ))}
           </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground">
-            </p>
+          <div className="mt-12 text-center">           
           </div>
         </div>
       </main>
