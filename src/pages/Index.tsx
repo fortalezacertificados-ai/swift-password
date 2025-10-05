@@ -47,7 +47,14 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header with Navigation */}
           <header className="flex justify-between items-center mb-8 animate-fade-in">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Link
+                to="/articles"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+              >
+                <Shield className="w-5 h-5" />
+                <span className="font-medium">Articles</span>
+              </Link>
               <Link
                 to="/strength-checker"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
@@ -71,6 +78,41 @@ const Index = () => {
 
           {/* Hero Section */}
           <HeroSection title={t.title} subtitle={t.subtitle} />
+
+          {/* Featured Article Section */}
+          <section className="mb-12 animate-fade-in">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">Latest from Our Blog</h2>
+              <Link to="/articles" className="text-primary hover:underline text-sm">
+                View all articles →
+              </Link>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-1">
+                  <span className="text-primary font-semibold text-sm">Password Security</span>
+                  <h3 className="text-2xl font-bold mt-2 mb-3">
+                    How to Create an Unbreakable Password in 2025
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    Learn the latest techniques and best practices for creating strong, memorable passwords 
+                    that can withstand modern hacking attempts. Discover why password managers are essential 
+                    and how to use them effectively.
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                    <span>Jan 15, 2025</span>
+                    <span>•</span>
+                    <span>5 min read</span>
+                  </div>
+                  <Link to="/password-guide">
+                    <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+                      Read More
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* 🔹 Anúncio Square (manual) */}
           <div className="w-full my-6">
@@ -144,10 +186,14 @@ const Index = () => {
           <footer className="mt-16 text-center text-muted-foreground text-sm animate-fade-in border-t border-border pt-8">
             <p>© 2025 Password Generator. All passwords are generated locally in your browser.</p>
             <p className="mt-2 text-xs">Your security is our priority. No data is stored or transmitted.</p>
-            <p className="mt-4">
-              <Link to="/cookie-policy" className="text-primary hover:underline text-xs">Cookie Policy</Link>
+            <p className="mt-4 flex flex-wrap justify-center gap-2">
+              <Link to="/about-us" className="text-primary hover:underline text-xs">About Us</Link>
+              {" • "}
+              <Link to="/contact-us" className="text-primary hover:underline text-xs">Contact Us</Link>
               {" • "}
               <Link to="/privacy-policy" className="text-primary hover:underline text-xs">Privacy Policy</Link>
+              {" • "}
+              <Link to="/cookie-policy" className="text-primary hover:underline text-xs">Cookie Policy</Link>
             </p>
 
             {/* Donate Section */}
