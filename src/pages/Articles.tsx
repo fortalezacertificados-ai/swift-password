@@ -119,7 +119,6 @@ const Articles = () => {
 
           <div className="mt-12 text-center">
             <p className="text-muted-foreground">
-              More articles coming soon. Stay tuned for the latest in cybersecurity!
             </p>
           </div>
         </div>
