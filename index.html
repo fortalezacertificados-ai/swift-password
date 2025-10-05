@@ -37,7 +37,22 @@
   <body>
     <div id="root"></div>
     <script src="https://fpyf8.com/88/tag.min.js" data-zone="176001" async data-cfasync="false"></script>
-    <script type="module" src="/src/main.tsx"></script>    
-    <script>(function(s){s.dataset.zone='9978080',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script type="module" src="/src/main.tsx"></script> 
+    <script>
+  var currentDate = new Date().toISOString().split('T')[0]; // Obtém a data atual no formato YYYY-MM-DD
+  var storedDate = localStorage.getItem('lastVisitDate');
+
+  if (storedDate !== currentDate) {
+    localStorage.setItem('visitorCount', 0); // Reseta o contador
+    localStorage.setItem('lastVisitDate', currentDate); // Atualiza a data da última visita
+  }
+
+  var visitorCount = localStorage.getItem('visitorCount');
+  visitorCount = parseInt(visitorCount) + 1;
+  localStorage.setItem('visitorCount', visitorCount);
+
+  // Atualize o contador na página
+  document.getElementById('count').textContent = visitorCount;
+</script>    
   </body>
 </html>
