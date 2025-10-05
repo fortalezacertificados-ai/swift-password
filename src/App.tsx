@@ -12,6 +12,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Articles from "./pages/Articles";
+import UnbreakablePassword2025 from "./pages/articles/UnbreakablePassword2025";
+import TwoFactorAuthentication from "./pages/articles/TwoFactorAuthentication";
+import CommonPasswordMistakes from "./pages/articles/CommonPasswordMistakes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,9 @@ const App = () => (
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/articles" element={<Articles />} />
+            <Route path="/articles/unbreakable-password-2025" element={<UnbreakablePassword2025 />} />
+            <Route path="/articles/two-factor-authentication-guide" element={<TwoFactorAuthentication />} />
+            <Route path="/articles/common-password-mistakes" element={<CommonPasswordMistakes />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

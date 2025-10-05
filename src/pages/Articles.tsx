@@ -16,34 +16,34 @@ interface Article {
   image?: string;
 }
 
-// Sample articles - in a real app, this would come from a CMS or database
+// Real articles with quality content for AdSense compliance
 const articles: Article[] = [
   {
     id: "1",
     title: "How to Create an Unbreakable Password in 2025",
-    excerpt: "Learn the latest techniques and best practices for creating strong, memorable passwords that can withstand modern hacking attempts. Discover why password managers are essential and how to use them effectively.",
-    date: "2025-01-15",
-    readTime: "5 min read",
+    excerpt: "In an era where cyber threats are more sophisticated than ever, creating a strong password is your first line of defense against hackers. This comprehensive guide explores proven strategies for generating passwords that are both secure and memorable, including the use of passphrases, password managers, and multi-factor authentication. Learn how to protect your digital identity with passwords that can withstand brute force attacks, dictionary attacks, and social engineering attempts.",
+    date: "2025-10-05",
+    readTime: "8 min read",
     category: "Password Security",
-    link: "/password-guide",
+    link: "/articles/unbreakable-password-2025",
   },
   {
     id: "2",
     title: "Understanding Two-Factor Authentication: Your Second Line of Defense",
-    excerpt: "Two-factor authentication (2FA) adds an extra layer of security to your accounts. Learn why it's crucial, how it works, and which 2FA methods are most secure in today's digital landscape.",
-    date: "2025-01-10",
-    readTime: "7 min read",
+    excerpt: "Two-factor authentication (2FA) has become essential for protecting online accounts from unauthorized access. This in-depth article explains the different types of 2FA methods available today, from SMS codes and authenticator apps to hardware security keys and biometric verification. Discover why relying solely on passwords is no longer sufficient, how attackers bypass weak 2FA implementations, and which authentication methods provide the strongest protection for your sensitive accounts.",
+    date: "2025-10-04",
+    readTime: "10 min read",
     category: "Authentication",
-    link: "/password-guide",
+    link: "/articles/two-factor-authentication-guide",
   },
   {
     id: "3",
     title: "Common Password Mistakes That Put You at Risk",
-    excerpt: "Avoid these critical password security mistakes that millions of people make every day. From using personal information to reusing passwords across sites, learn what to avoid.",
-    date: "2025-01-05",
-    readTime: "4 min read",
+    excerpt: "Despite widespread awareness of cybersecurity threats, millions of people continue to make critical password mistakes that leave their accounts vulnerable to attacks. This article identifies the most common password security errors, including using predictable patterns, recycling passwords across multiple sites, storing passwords insecurely, and falling for phishing scams. Learn practical strategies to avoid these pitfalls and implement a robust password security routine that protects your personal and professional data from cybercriminals.",
+    date: "2025-10-03",
+    readTime: "7 min read",
     category: "Security Tips",
-    link: "/password-guide",
+    link: "/articles/common-password-mistakes",
   },
 ];
 
