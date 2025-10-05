@@ -1,44 +1,27 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-const DATA_FILE = path.join(process.cwd(), 'visitorData.json');
+const filePath = path.join(process.cwd(), "visitors.json");
 
-interface VisitorData {
-  date: string;
-  count: number;
-}
+export default function handler(req, res) {
+  let data = { date: "", count: 0 };
 
-// Função para ler arquivo JSON
-const readData = (): VisitorData => {
-  try {
-    if (!fs.existsSync(DATA_FILE)) {
-      return { date: '', count: 0 };
-    }
-    const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch (e) {
-    return { date: '', count: 0 };
+  // lê arquivo se existir
+  if (fs.existsSync(filePath)) {
+    const fileData = fs.readFileSync(filePath, "utf8");
+    data = JSON.parse(fileData);
   }
-};
 
-// Função para salvar arquivo JSON
-const saveData = (data: VisitorData) => {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data));
-};
+  const today = new Date().toISOString().split("T")[0];
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  const today = new Date().toISOString().split('T')[0];
-  const data = readData();
-
-  if (data.date === today) {
-    data.count += 1;
-  } else {
+  if (data.date !== today) {
     data.date = today;
     data.count = 1;
+  } else {
+    data.count += 1;
   }
 
-  saveData(data);
+  fs.writeFileSync(filePath, JSON.stringify(data));
 
   res.status(200).json({ count: data.count });
 }
