@@ -23,7 +23,7 @@ const Index = () => {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  // ⚡ Inicializa blocos de AdSense e contador diário
+  // ⚡ Inicializa blocos de AdSense e contador global
   useEffect(() => {
     try {
       // @ts-ignore
@@ -32,20 +32,11 @@ const Index = () => {
       console.log("Adsense error:", e);
     }
 
-    // Contador diário local
-    const today = new Date().toISOString().split("T")[0];
-    const storedDate = localStorage.getItem("visitorDate");
-    let count = parseInt(localStorage.getItem("visitorCount") || "0");
-
-    if (storedDate !== today) {
-      count = 1; // reinicia contador todo dia
-      localStorage.setItem("visitorDate", today);
-    } else {
-      count += 1;
-    }
-
-    localStorage.setItem("visitorCount", count);
-    setVisitorCount(count);
+    // Busca contador global do dia
+    fetch("/api/visitors")
+      .then((res) => res.json())
+      .then((data) => setVisitorCount(data.count))
+      .catch((err) => console.log("Visitor count error:", err));
   }, []);
 
   return (
@@ -216,21 +207,18 @@ const Index = () => {
             <div className="mt-6 flex flex-col items-center gap-3">
               <p className="font-medium text-foreground">Donate to support this project 💙</p>
               <div className="flex flex-wrap justify-center gap-3">
-                {/* BTC */}
                 <button
                   onClick={() => handleCopy("1DFPKXMbfbjdGjWUwkBiX2EEGa45ZhuTYj", "BTC")}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
                 >
                   BTC
                 </button>
-                {/* SOL */}
                 <button
                   onClick={() => handleCopy("4RgbL64ZFmAH2LVD8EF9ZzuvvwEpRbLoUS3rPkNtGjXf", "SOL")}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
                 >
                   SOL
                 </button>
-                {/* ETH */}
                 <button
                   onClick={() => handleCopy("0x6585bC3996d5D4594e26bd8909c55661440d26F6", "ETH")}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors text-primary text-sm"
