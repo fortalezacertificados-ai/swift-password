@@ -32,11 +32,29 @@ const Index = () => {
       console.log("Adsense error:", e);
     }
 
-    // Busca contador global do dia
-    fetch("/api/visitors")
-      .then((res) => res.json())
-      .then((data) => setVisitorCount(data.count))
-      .catch((err) => console.log("Visitor count error:", err));
+    // Track visitor using Lovable Cloud function
+    const trackVisitor = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-visitor`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          setVisitorCount(data.count);
+        }
+      } catch (error) {
+        console.error("Visitor count error:", error);
+      }
+    };
+
+    trackVisitor();
   }, []);
 
   return (
