@@ -8,6 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import PasswordGuide from "@/components/PasswordGuide";
 import SEOHead from "@/components/SEOHead";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import ArticleSlider from "@/components/ArticleSlider";
 import { translations, Language } from "@/lib/translations";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -101,40 +102,8 @@ const Index = () => {
           {/* Hero Section */}
           <HeroSection title={t.title} subtitle={t.subtitle} />
 
-          {/* Featured Article Section */}
-          <section className="mb-12 animate-fade-in">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Latest from Our Blog</h2>
-              <Link to="/articles" className="text-primary hover:underline text-sm">
-                View all articles →
-              </Link>
-            </div>
-            <div className="bg-card border border-border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1">
-                  <span className="text-primary font-semibold text-sm">Password Security</span>
-                  <h3 className="text-2xl font-bold mt-2 mb-3">
-                    How to Create an Unbreakable Password in 2025
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Learn the latest techniques and best practices for creating strong, memorable passwords 
-                    that can withstand modern hacking attempts. Discover why password managers are essential 
-                    and how to use them effectively.
-                  </p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <span>Jan 15, 2025</span>
-                    <span>•</span>
-                    <span>5 min read</span>
-                  </div>
-                  <Link to="/password-guide">
-                    <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
-                      Read More
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
+          {/* Article Slider Section */}
+          <ArticleSlider />
 
           {/* 🔹 Anúncio Square (manual) */}
           <div className="w-full my-6">
