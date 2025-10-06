@@ -9,6 +9,7 @@ import PasswordGuide from "@/components/PasswordGuide";
 import SEOHead from "@/components/SEOHead";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import { translations, Language } from "@/lib/translations";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [language, setLanguage] = useState<Language>("en");
@@ -35,18 +36,14 @@ const Index = () => {
     // Track visitor using Lovable Cloud function
     const trackVisitor = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-visitor`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        const { data, error } = await supabase.functions.invoke('track-visitor');
         
-        if (response.ok) {
-          const data = await response.json();
+        if (error) {
+          console.error("Visitor count error:", error);
+          return;
+        }
+        
+        if (data?.count) {
           setVisitorCount(data.count);
         }
       } catch (error) {
