@@ -47,7 +47,7 @@ export default function ArticleEditor() {
       setPublished(data.published);
 
       if (contentRef.current) {
-        contentRef.current.innerHTML = data.content || "";
+        contentRef.current.innerText = data.content || "";
       }
     }
   };
@@ -77,7 +77,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content: getCleanContent(),
+        content: contentRef.current?.innerText || "", // SALVA TEXTO PURO
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -104,40 +104,6 @@ export default function ArticleEditor() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Aplica o tamanho de fonte ao texto selecionado
-  const changeFontSize = (size: number) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) return;
-
-    const content = range.extractContents();
-    const p = document.createElement("p");
-    p.style.fontSize = `${size}px`;
-    p.appendChild(content);
-    range.insertNode(p);
-
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(p);
-    selection.addRange(newRange);
-  };
-
-  // Limpa spans antes de salvar
-  const getCleanContent = () => {
-    if (!contentRef.current) return "";
-    const cloned = contentRef.current.cloneNode(true) as HTMLDivElement;
-
-    cloned.querySelectorAll("span").forEach((span) => {
-      const p = document.createElement("p");
-      p.style.fontSize = span.style.fontSize;
-      p.innerHTML = span.innerHTML;
-      span.replaceWith(p);
-    });
-
-    return cloned.innerHTML;
   };
 
   return (
@@ -215,15 +181,13 @@ export default function ArticleEditor() {
                       <option key={s} value={s}>{s}px</option>
                     ))}
                   </select>
-                  <Button type="button" onClick={() => changeFontSize(fontSize)}>
-                    Aplicar
-                  </Button>
                 </div>
 
                 <div
                   ref={contentRef}
                   contentEditable
                   className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
+                  style={{ fontSize: `${fontSize}px` }} // visual apenas
                   suppressContentEditableWarning
                 />
               </div>
