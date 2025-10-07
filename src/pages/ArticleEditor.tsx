@@ -22,11 +22,14 @@ export default function ArticleEditor() {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
+  const [fontSize, setFontSize] = useState(16);
 
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isEditing) loadArticle();
+    if (isEditing) {
+      loadArticle();
+    }
   }, [id]);
 
   const loadArticle = async () => {
@@ -105,44 +108,27 @@ export default function ArticleEditor() {
     }
   };
 
-  // Função para aumentar/diminuir tamanho do texto selecionado
-  const changeFontSize = (action: "increase" | "decrease") => {
+  // Função para alterar o tamanho da fonte do texto selecionado
+  const changeFontSize = (size: number) => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-
     const range = selection.getRangeAt(0);
     if (range.collapsed) return;
 
     const span = document.createElement("span");
-
-    const parentNode = range.commonAncestorContainer.parentNode as HTMLElement;
-    const currentSize = parseInt(
-      window.getComputedStyle(parentNode as Element).fontSize.replace("px", "")
-    ) || 16;
-
-    const newSize = action === "increase" ? currentSize + 2 : Math.max(currentSize - 2, 8);
-    span.style.fontSize = `${newSize}px`;
-
+    span.style.fontSize = `${size}px`;
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
-    if (contentRef.current) setContent(contentRef.current.innerHTML);
-
-    // mantém seleção no texto alterado
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.addRange(newRange);
+    if (contentRef.current) {
+      setContent(contentRef.current.innerHTML);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/admin")}
-          className="mb-4"
-        >
+        <Button variant="ghost" onClick={() => navigate("/admin")} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Voltar
         </Button>
@@ -196,38 +182,41 @@ export default function ArticleEditor() {
                   placeholder="https://exemplo.com/imagem.jpg"
                 />
                 {imageUrl && (
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="mt-2 max-w-sm rounded-lg"
-                  />
+                  <img src={imageUrl} alt="Preview" className="mt-2 max-w-sm rounded-lg" />
                 )}
               </div>
 
-              {/* Conteúdo com botões de aumentar/diminuir fonte */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
-                <div className="flex gap-2 mb-2">
-                  <Button type="button" onClick={() => changeFontSize("increase")}>
-                    A+
-                  </Button>
-                  <Button type="button" onClick={() => changeFontSize("decrease")}>
-                    A-
-                  </Button>
+                {/* Box para escolher tamanho da fonte */}
+                <div className="flex items-center gap-2 mb-2">
+                  <Label>Tamanho da Fonte:</Label>
+                  <select
+                    className="border rounded px-2 py-1"
+                    value={fontSize}
+                    onChange={(e) => {
+                      const size = parseInt(e.target.value);
+                      setFontSize(size);
+                      changeFontSize(size);
+                    }}
+                  >
+                    {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48].map((s) => (
+                      <option key={s} value={s}>{s}px</option>
+                    ))}
+                  </select>
                 </div>
 
+                {/* Editor de conteúdo */}
                 <div
                   ref={contentRef}
-                  id="content"
                   contentEditable
                   className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
                   suppressContentEditableWarning
-                  onInput={(e: React.FormEvent<HTMLDivElement>) =>
-                    setContent((e.target as HTMLDivElement).innerHTML)
-                  }
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
+                  onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: content }} />
+                </div>
               </div>
 
               <div className="flex items-center space-x-2">
@@ -243,11 +232,7 @@ export default function ArticleEditor() {
                 <Button type="submit" disabled={loading}>
                   {loading ? "Salvando..." : "Salvar Artigo"}
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate("/admin")}
-                >
+                <Button type="button" variant="outline" onClick={() => navigate("/admin")}>
                   Cancelar
                 </Button>
               </div>
