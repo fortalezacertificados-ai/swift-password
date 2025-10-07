@@ -107,51 +107,18 @@ export default function ArticleEditor() {
     }
   };
 
-  // Função para alterar tamanho do texto selecionado sem perder formatação
+  // Função para aumentar/diminuir o tamanho do texto selecionado
   const changeFontSize = (action: "increase" | "decrease") => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
+    if (!contentRef.current) return;
 
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) return;
+    contentRef.current.focus(); // garante que o editor está focado
 
-    const wrapper = document.createElement("div");
-    wrapper.appendChild(range.extractContents());
+    // fontSize do execCommand vai de 1 a 7
+    const size = action === "increase" ? "5" : "3";
+    document.execCommand("fontSize", false, size);
 
-    wrapper.querySelectorAll("*").forEach((el: any) => {
-      const currentSize = parseInt(
-        window.getComputedStyle(el).fontSize.replace("px", "")
-      ) || 16;
-      el.style.fontSize =
-        action === "increase"
-          ? currentSize + 2 + "px"
-          : Math.max(currentSize - 2, 8) + "px";
-    });
-
-    // Aplica ao wrapper se nenhum filho
-    if (wrapper.childNodes.length === 0) {
-      const currentSize = parseInt(
-        window.getComputedStyle(wrapper).fontSize.replace("px", "")
-      ) || 16;
-      wrapper.style.fontSize =
-        action === "increase"
-          ? currentSize + 2 + "px"
-          : Math.max(currentSize - 2, 8) + "px";
-    }
-
-    range.insertNode(wrapper);
-
-    // Atualiza estado
-    if (contentRef.current) {
-      setContent(contentRef.current.innerHTML);
-    }
-
-    // Move cursor para final do bloco
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(wrapper);
-    newRange.collapse(false);
-    selection.addRange(newRange);
+    // Atualiza o estado do conteúdo
+    setContent(contentRef.current.innerHTML);
   };
 
   return (
@@ -225,7 +192,7 @@ export default function ArticleEditor() {
                 )}
               </div>
 
-              {/* Conteúdo com edição de fonte preservando formatação */}
+              {/* Conteúdo com botões de aumentar/diminuir fonte */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
