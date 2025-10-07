@@ -107,7 +107,7 @@ export default function ArticleEditor() {
     }
   };
 
-  // Função para alterar tamanho do texto selecionado
+  // Função para alterar tamanho do texto selecionado sem perder formatação
   const changeFontSize = (action: "increase" | "decrease") => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -115,26 +115,41 @@ export default function ArticleEditor() {
     const range = selection.getRangeAt(0);
     if (range.collapsed) return;
 
-    const span = document.createElement("span");
-    span.appendChild(range.extractContents());
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(range.extractContents());
 
-    const currentSize = parseInt(
-      window.getComputedStyle(span).fontSize.replace("px", "")
-    ) || 16;
+    wrapper.querySelectorAll("*").forEach((el: any) => {
+      const currentSize = parseInt(
+        window.getComputedStyle(el).fontSize.replace("px", "")
+      ) || 16;
+      el.style.fontSize =
+        action === "increase"
+          ? currentSize + 2 + "px"
+          : Math.max(currentSize - 2, 8) + "px";
+    });
 
-    span.style.fontSize =
-      action === "increase" ? currentSize + 2 + "px" : Math.max(currentSize - 2, 8) + "px";
+    // Aplica ao wrapper se nenhum filho
+    if (wrapper.childNodes.length === 0) {
+      const currentSize = parseInt(
+        window.getComputedStyle(wrapper).fontSize.replace("px", "")
+      ) || 16;
+      wrapper.style.fontSize =
+        action === "increase"
+          ? currentSize + 2 + "px"
+          : Math.max(currentSize - 2, 8) + "px";
+    }
 
-    range.insertNode(span);
+    range.insertNode(wrapper);
 
-    // Atualiza o estado do conteúdo
+    // Atualiza estado
     if (contentRef.current) {
       setContent(contentRef.current.innerHTML);
     }
 
+    // Move cursor para final do bloco
     selection.removeAllRanges();
     const newRange = document.createRange();
-    newRange.selectNodeContents(span);
+    newRange.selectNodeContents(wrapper);
     newRange.collapse(false);
     selection.addRange(newRange);
   };
@@ -210,7 +225,7 @@ export default function ArticleEditor() {
                 )}
               </div>
 
-              {/* Conteúdo com alteração de fonte */}
+              {/* Conteúdo com edição de fonte preservando formatação */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
@@ -227,7 +242,7 @@ export default function ArticleEditor() {
                   ref={contentRef}
                   id="content"
                   contentEditable
-                  className="border rounded p-2 min-h-[300px] focus:outline-none"
+                  className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
                   dangerouslySetInnerHTML={{ __html: content }}
                   onInput={(e: any) => setContent(e.currentTarget.innerHTML)}
                 />
