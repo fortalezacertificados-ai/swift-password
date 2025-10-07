@@ -21,11 +21,9 @@ export default function ArticleEditor() {
   const [excerpt, setExcerpt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
-
-  const contentRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(16);
 
-  const [initialContentLoaded, setInitialContentLoaded] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isEditing) loadArticle();
@@ -48,10 +46,8 @@ export default function ArticleEditor() {
       setImageUrl(data.image_url || "");
       setPublished(data.published);
 
-      // inicializa o conteúdo apenas uma vez no editor
       if (contentRef.current) {
         contentRef.current.innerHTML = data.content || "";
-        setInitialContentLoaded(true);
       }
     }
   };
@@ -81,7 +77,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content: contentRef.current?.innerHTML || "",
+        content: getCleanContent(),
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -110,24 +106,38 @@ export default function ArticleEditor() {
     }
   };
 
-  // Função para alterar o tamanho da fonte do texto selecionado
+  // Aplica o tamanho de fonte ao texto selecionado
   const changeFontSize = (size: number) => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-
     const range = selection.getRangeAt(0);
     if (range.collapsed) return;
 
-    const span = document.createElement("span");
-    span.style.fontSize = `${size}px`;
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
+    const content = range.extractContents();
+    const p = document.createElement("p");
+    p.style.fontSize = `${size}px`;
+    p.appendChild(content);
+    range.insertNode(p);
 
-    // mantém seleção no novo conteúdo
     selection.removeAllRanges();
     const newRange = document.createRange();
-    newRange.selectNodeContents(span);
+    newRange.selectNodeContents(p);
     selection.addRange(newRange);
+  };
+
+  // Limpa spans antes de salvar
+  const getCleanContent = () => {
+    if (!contentRef.current) return "";
+    const cloned = contentRef.current.cloneNode(true) as HTMLDivElement;
+
+    cloned.querySelectorAll("span").forEach((span) => {
+      const p = document.createElement("p");
+      p.style.fontSize = span.style.fontSize;
+      p.innerHTML = span.innerHTML;
+      span.replaceWith(p);
+    });
+
+    return cloned.innerHTML;
   };
 
   return (
@@ -194,7 +204,6 @@ export default function ArticleEditor() {
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
-                {/* Box de tamanho de fonte */}
                 <div className="flex items-center gap-2 mb-2">
                   <Label>Tamanho da Fonte:</Label>
                   <select
@@ -211,7 +220,6 @@ export default function ArticleEditor() {
                   </Button>
                 </div>
 
-                {/* Editor de conteúdo */}
                 <div
                   ref={contentRef}
                   contentEditable
