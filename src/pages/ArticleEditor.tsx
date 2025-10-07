@@ -105,7 +105,7 @@ export default function ArticleEditor() {
     }
   };
 
-  // Nova função de aumentar/diminuir tamanho do texto selecionado
+  // Função para aumentar/diminuir tamanho do texto selecionado
   const changeFontSize = (action: "increase" | "decrease") => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -204,6 +204,7 @@ export default function ArticleEditor() {
                 )}
               </div>
 
+              {/* Conteúdo com botões de aumentar/diminuir fonte */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
@@ -221,8 +222,11 @@ export default function ArticleEditor() {
                   id="content"
                   contentEditable
                   className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
+                  suppressContentEditableWarning
+                  onInput={(e: React.FormEvent<HTMLDivElement>) =>
+                    setContent((e.target as HTMLDivElement).innerHTML)
+                  }
                   dangerouslySetInnerHTML={{ __html: content }}
-                  onInput={(e: any) => setContent(e.currentTarget.innerHTML)}
                 />
               </div>
 
