@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [articles, setArticles] = useState<any[]>([]);
+  const [fontSize, setFontSize] = useState(16); // Tamanho de fonte padrão em px
 
   useEffect(() => {
     checkAuth();
@@ -21,15 +22,12 @@ export default function AdminDashboard() {
   const checkAuth = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) {
         navigate("/auth");
         return;
       }
-
       setUser(user);
 
-      // Check if user is admin
       const { data: roleData, error: roleError } = await supabase
         .from("user_roles")
         .select("role")
@@ -101,7 +99,8 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+        {/* Cabeçalho */}
+        <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-4xl font-bold">Painel Administrativo</h1>
             <p className="text-muted-foreground mt-2">Gerencie seus artigos</p>
@@ -118,15 +117,28 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Controle de tamanho de fonte */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
+            Ajustar tamanho da fonte dos artigos: {fontSize}px
+          </label>
+          <input
+            type="range"
+            min={12}
+            max={32}
+            value={fontSize}
+            onChange={(e) => setFontSize(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        {/* Lista de artigos */}
         <div className="grid gap-4">
           {articles.length === 0 ? (
             <Card>
               <CardContent className="py-8 text-center">
                 <p className="text-muted-foreground">Nenhum artigo criado ainda.</p>
-                <Button 
-                  onClick={() => navigate("/admin/article/new")} 
-                  className="mt-4"
-                >
+                <Button onClick={() => navigate("/admin/article/new")} className="mt-4">
                   Criar Primeiro Artigo
                 </Button>
               </CardContent>
@@ -137,11 +149,22 @@ export default function AdminDashboard() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle>{article.title}</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <CardTitle
+                        style={{ fontSize: `${fontSize + 4}px` }} // título ligeiramente maior que o corpo
+                        className="font-semibold"
+                      >
+                        {article.title}
+                      </CardTitle>
+                      <p
+                        style={{ fontSize: `${fontSize}px` }}
+                        className="text-muted-foreground mt-1"
+                      >
                         Por {article.author} • {new Date(article.created_at).toLocaleDateString()}
                       </p>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p
+                        style={{ fontSize: `${fontSize - 2}px` }}
+                        className="text-muted-foreground mt-1"
+                      >
                         Status: {article.published ? "Publicado" : "Rascunho"}
                       </p>
                     </div>
@@ -165,7 +188,9 @@ export default function AdminDashboard() {
                 </CardHeader>
                 {article.excerpt && (
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{article.excerpt}</p>
+                    <p style={{ fontSize: `${fontSize}px` }} className="text-muted-foreground">
+                      {article.excerpt}
+                    </p>
                   </CardContent>
                 )}
               </Card>
