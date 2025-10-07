@@ -26,9 +26,7 @@ export default function ArticleEditor() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isEditing) {
-      loadArticle();
-    }
+    if (isEditing) loadArticle();
   }, [id]);
 
   const loadArticle = async () => {
@@ -107,18 +105,34 @@ export default function ArticleEditor() {
     }
   };
 
-  // Função para aumentar/diminuir o tamanho do texto selecionado
+  // Nova função de aumentar/diminuir tamanho do texto selecionado
   const changeFontSize = (action: "increase" | "decrease") => {
-    if (!contentRef.current) return;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
 
-    contentRef.current.focus(); // garante que o editor está focado
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return;
 
-    // fontSize do execCommand vai de 1 a 7
-    const size = action === "increase" ? "5" : "3";
-    document.execCommand("fontSize", false, size);
+    const span = document.createElement("span");
 
-    // Atualiza o estado do conteúdo
-    setContent(contentRef.current.innerHTML);
+    const parentNode = range.commonAncestorContainer.parentNode as HTMLElement;
+    const currentSize = parseInt(
+      window.getComputedStyle(parentNode as Element).fontSize.replace("px", "")
+    ) || 16;
+
+    const newSize = action === "increase" ? currentSize + 2 : Math.max(currentSize - 2, 8);
+    span.style.fontSize = `${newSize}px`;
+
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    if (contentRef.current) setContent(contentRef.current.innerHTML);
+
+    // mantém seleção no texto alterado
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
   };
 
   return (
@@ -135,9 +149,7 @@ export default function ArticleEditor() {
 
         <Card>
           <CardHeader>
-            <CardTitle>
-              {isEditing ? "Editar Artigo" : "Novo Artigo"}
-            </CardTitle>
+            <CardTitle>{isEditing ? "Editar Artigo" : "Novo Artigo"}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -192,7 +204,6 @@ export default function ArticleEditor() {
                 )}
               </div>
 
-              {/* Conteúdo com botões de aumentar/diminuir fonte */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
