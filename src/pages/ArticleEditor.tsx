@@ -77,7 +77,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content: contentRef.current?.innerText || "", // SALVA TEXTO PURO
+        content: contentRef.current?.innerText || "", // SALVA APENAS TEXTO PURO
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -105,6 +105,32 @@ export default function ArticleEditor() {
       setLoading(false);
     }
   };
+
+  // Altera apenas o texto selecionado no editor
+  const changeSelectedFontSize = (size: number) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return;
+
+    const span = document.createElement("span");
+    span.style.fontSize = `${size}px`;
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    // Mantém seleção sobre o texto alterado
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
+
+    // Atualiza estado do editor (React)
+    if (contentRef.current) setContent(contentRef.current.innerHTML);
+  };
+
+  // Estado só para trigger React (não salva span)
+  const [content, setContent] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
@@ -170,6 +196,7 @@ export default function ArticleEditor() {
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
+                {/* Box de tamanho de fonte */}
                 <div className="flex items-center gap-2 mb-2">
                   <Label>Tamanho da Fonte:</Label>
                   <select
@@ -181,14 +208,18 @@ export default function ArticleEditor() {
                       <option key={s} value={s}>{s}px</option>
                     ))}
                   </select>
+                  <Button type="button" onClick={() => changeSelectedFontSize(fontSize)}>
+                    Aplicar ao Selecionado
+                  </Button>
                 </div>
 
+                {/* Editor */}
                 <div
                   ref={contentRef}
                   contentEditable
                   className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
-                  style={{ fontSize: `${fontSize}px` }} // visual apenas
                   suppressContentEditableWarning
+                  onInput={(e: any) => setContent(e.currentTarget.innerHTML)}
                 />
               </div>
 
