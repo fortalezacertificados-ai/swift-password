@@ -57,7 +57,7 @@ export default function ArticleDetail() {
             className="inline-flex items-center gap-2 text-primary hover:underline mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
-            Voltar para Artigos
+            Back to articles
           </Link>
 
           {article.image_url && (
@@ -71,7 +71,7 @@ export default function ArticleDetail() {
           <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
           
           <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
-            <span>Por {article.author}</span>
+            <span>By {article.author}</span>
             <span>•</span>
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
