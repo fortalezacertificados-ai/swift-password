@@ -1,5 +1,4 @@
-tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -23,6 +22,8 @@ export default function ArticleEditor() {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
+
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isEditing) {
@@ -106,6 +107,38 @@ export default function ArticleEditor() {
     }
   };
 
+  // Função para alterar tamanho do texto selecionado
+  const changeFontSize = (action: "increase" | "decrease") => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return;
+
+    const span = document.createElement("span");
+    span.appendChild(range.extractContents());
+
+    const currentSize = parseInt(
+      window.getComputedStyle(span).fontSize.replace("px", "")
+    ) || 16;
+
+    span.style.fontSize =
+      action === "increase" ? currentSize + 2 + "px" : Math.max(currentSize - 2, 8) + "px";
+
+    range.insertNode(span);
+
+    // Atualiza o estado do conteúdo
+    if (contentRef.current) {
+      setContent(contentRef.current.innerHTML);
+    }
+
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    newRange.collapse(false);
+    selection.addRange(newRange);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -177,15 +210,26 @@ export default function ArticleEditor() {
                 )}
               </div>
 
+              {/* Conteúdo com alteração de fonte */}
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
-                <Textarea
+
+                <div className="flex gap-2 mb-2">
+                  <Button type="button" onClick={() => changeFontSize("increase")}>
+                    A+
+                  </Button>
+                  <Button type="button" onClick={() => changeFontSize("decrease")}>
+                    A-
+                  </Button>
+                </div>
+
+                <div
+                  ref={contentRef}
                   id="content"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Escreva o conteúdo do artigo aqui..."
-                  rows={15}
-                  required
+                  contentEditable
+                  className="border rounded p-2 min-h-[300px] focus:outline-none"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                  onInput={(e: any) => setContent(e.currentTarget.innerHTML)}
                 />
               </div>
 
