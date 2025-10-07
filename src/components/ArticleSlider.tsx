@@ -84,7 +84,7 @@ export default function ArticleSlider() {
                   <p className="text-lg mb-6">{article.excerpt || article.content.substring(0, 120) + "..."}</p>
                   <Link to={`/article/${article.slug}`}>
                     <Button variant="secondary" size="lg">
-                      Ler Artigo
+                      Read article
                     </Button>
                   </Link>
                 </div>
