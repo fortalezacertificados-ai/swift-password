@@ -1,20 +1,15 @@
-import { useEffect, useState, useRef } from "react";
+tsx
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
-import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
-// Configuração de tamanhos de fonte customizados
-const Size = Quill.import('formats/size');
-Size.whitelist = ['small', 'medium', 'large', 'huge'];
-Quill.register(Size, true);
 
 export default function ArticleEditor() {
   const navigate = useNavigate();
@@ -28,8 +23,6 @@ export default function ArticleEditor() {
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
-
-  const quillRef = useRef<ReactQuill>(null);
 
   useEffect(() => {
     if (isEditing) {
@@ -82,7 +75,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content, // aqui o conteúdo já está em HTML do ReactQuill
+        content,
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -111,16 +104,6 @@ export default function ArticleEditor() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const quillModules = {
-    toolbar: [
-      [{ 'size': ['small', 'medium', 'large', 'huge'] }], // tamanho do texto
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link', 'image'],
-      ['clean']
-    ],
   };
 
   return (
@@ -196,12 +179,13 @@ export default function ArticleEditor() {
 
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
-                <ReactQuill
-                  ref={quillRef}
+                <Textarea
+                  id="content"
                   value={content}
-                  onChange={setContent}
-                  modules={quillModules}
+                  onChange={(e) => setContent(e.target.value)}
                   placeholder="Escreva o conteúdo do artigo aqui..."
+                  rows={15}
+                  required
                 />
               </div>
 
