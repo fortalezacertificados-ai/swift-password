@@ -1,53 +1,31 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Shield, ArrowLeft, Calendar, Clock } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-// Article data structure
-interface Article {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  category: string;
-  link: string;
-  image?: string;
-}
-
-// Real articles with quality content for AdSense compliance
-const articles: Article[] = [
-  {
-    id: "1",
-    title: "How to Create an Unbreakable Password in 2025",
-    excerpt: "In an era where cyber threats are more sophisticated than ever, creating a strong password is your first line of defense against hackers. This comprehensive guide explores proven strategies for generating passwords that are both secure and memorable, including the use of passphrases, password managers, and multi-factor authentication. Learn how to protect your digital identity with passwords that can withstand brute force attacks, dictionary attacks, and social engineering attempts.",
-    date: "2025-10-05",
-    readTime: "8 min read",
-    category: "Password Security",
-    link: "/articles/unbreakable-password-2025",
-  },
-  {
-    id: "2",
-    title: "Understanding Two-Factor Authentication: Your Second Line of Defense",
-    excerpt: "Two-factor authentication (2FA) has become essential for protecting online accounts from unauthorized access. This in-depth article explains the different types of 2FA methods available today, from SMS codes and authenticator apps to hardware security keys and biometric verification. Discover why relying solely on passwords is no longer sufficient, how attackers bypass weak 2FA implementations, and which authentication methods provide the strongest protection for your sensitive accounts.",
-    date: "2025-10-04",
-    readTime: "10 min read",
-    category: "Authentication",
-    link: "/articles/two-factor-authentication-guide",
-  },
-  {
-    id: "3",
-    title: "Common Password Mistakes That Put You at Risk",
-    excerpt: "Despite widespread awareness of cybersecurity threats, millions of people continue to make critical password mistakes that leave their accounts vulnerable to attacks. This article identifies the most common password security errors, including using predictable patterns, recycling passwords across multiple sites, storing passwords insecurely, and falling for phishing scams. Learn practical strategies to avoid these pitfalls and implement a robust password security routine that protects your personal and professional data from cybercriminals.",
-    date: "2025-10-03",
-    readTime: "7 min read",
-    category: "Security Tips",
-    link: "/articles/common-password-mistakes",
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const Articles = () => {
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadArticles();
+  }, []);
+
+  const loadArticles = async () => {
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .eq("published", true)
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      setArticles(data);
+    }
+    setLoading(false);
+  };
   return (
     <>
       <SEOHead
@@ -76,46 +54,53 @@ const Articles = () => {
             Stay informed with the latest news, tips, and best practices for online security
           </p>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article) => (
-              <Card key={article.id} className="shadow-lg hover:shadow-xl transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 text-sm text-primary mb-3">
-                    <span className="font-semibold">{article.category}</span>
-                  </div>
-                  
-                  <h2 className="text-xl font-bold mb-3 line-clamp-2">
-                    {article.title}
-                  </h2>
-                  
-                  <p className="text-muted-foreground mb-4 line-clamp-3">
-                    {article.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>{new Date(article.date).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                      })}</span>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Carregando artigos...</p>
+            </div>
+          ) : articles.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Nenhum artigo publicado ainda.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {articles.map((article) => (
+                <Card key={article.id} className="shadow-lg hover:shadow-xl transition-shadow">
+                  {article.image_url && (
+                    <img
+                      src={article.image_url}
+                      alt={article.title}
+                      className="w-full h-48 object-cover rounded-t-lg"
+                    />
+                  )}
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold mb-3 line-clamp-2">
+                      {article.title}
+                    </h2>
+                    
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {article.excerpt || article.content.substring(0, 150) + "..."}
+                    </p>
+                    
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{new Date(article.created_at).toLocaleDateString('pt-BR')}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{article.readTime}</span>
-                    </div>
-                  </div>
-                  
-                  <Link to={article.link}>
-                    <Button variant="outline" className="w-full">
-                      Read More
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    
+                    <p className="text-sm text-muted-foreground mb-4">Por {article.author}</p>
+                    
+                    <Link to={`/article/${article.slug}`}>
+                      <Button variant="outline" className="w-full">
+                        Ler Mais
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
           <div className="mt-12 text-center">           
           </div>
         </div>

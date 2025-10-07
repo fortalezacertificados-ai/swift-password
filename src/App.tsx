@@ -15,6 +15,10 @@ import Articles from "./pages/Articles";
 import UnbreakablePassword2025 from "./pages/articles/UnbreakablePassword2025";
 import TwoFactorAuthentication from "./pages/articles/TwoFactorAuthentication";
 import CommonPasswordMistakes from "./pages/articles/CommonPasswordMistakes";
+import Auth from "./pages/Auth";
+import AdminDashboard from "./pages/AdminDashboard";
+import ArticleEditor from "./pages/ArticleEditor";
+import ArticleDetail from "./pages/ArticleDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +42,10 @@ const App = () => (
             <Route path="/articles/unbreakable-password-2025" element={<UnbreakablePassword2025 />} />
             <Route path="/articles/two-factor-authentication-guide" element={<TwoFactorAuthentication />} />
             <Route path="/articles/common-password-mistakes" element={<CommonPasswordMistakes />} />
+            <Route path="/article/:slug" element={<ArticleDetail />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/article/:id" element={<ArticleEditor />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
