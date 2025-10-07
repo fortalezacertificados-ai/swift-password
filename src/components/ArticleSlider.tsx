@@ -56,9 +56,9 @@ export default function ArticleSlider() {
   return (
     <section className="mb-12">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Artigos em Destaque</h2>
+        <h2 className="text-2xl font-bold">Featured Articles</h2>
         <Link to="/articles" className="text-primary hover:underline text-sm">
-          Ver todos os artigos →
+          See all articles →
         </Link>
       </div>
 
