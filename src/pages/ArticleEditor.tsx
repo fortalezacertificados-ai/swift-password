@@ -19,17 +19,16 @@ export default function ArticleEditor() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [excerpt, setExcerpt] = useState("");
-  const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
 
   const contentRef = useRef<HTMLDivElement>(null);
+  const [fontSize, setFontSize] = useState(16);
+
+  const [initialContentLoaded, setInitialContentLoaded] = useState(false);
 
   useEffect(() => {
-    if (isEditing) {
-      loadArticle();
-    }
+    if (isEditing) loadArticle();
   }, [id]);
 
   const loadArticle = async () => {
@@ -46,9 +45,14 @@ export default function ArticleEditor() {
       setTitle(data.title);
       setAuthor(data.author);
       setExcerpt(data.excerpt || "");
-      setContent(data.content);
       setImageUrl(data.image_url || "");
       setPublished(data.published);
+
+      // inicializa o conteúdo apenas uma vez no editor
+      if (contentRef.current) {
+        contentRef.current.innerHTML = data.content || "";
+        setInitialContentLoaded(true);
+      }
     }
   };
 
@@ -77,7 +81,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content,
+        content: contentRef.current?.innerHTML || "",
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -88,14 +92,12 @@ export default function ArticleEditor() {
           .from("articles")
           .update(articleData)
           .eq("id", id);
-
         if (error) throw error;
         toast.success("Artigo atualizado com sucesso!");
       } else {
         const { error } = await supabase
           .from("articles")
           .insert([articleData]);
-
         if (error) throw error;
         toast.success("Artigo criado com sucesso!");
       }
@@ -112,6 +114,7 @@ export default function ArticleEditor() {
   const changeFontSize = (size: number) => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
+
     const range = selection.getRangeAt(0);
     if (range.collapsed) return;
 
@@ -120,9 +123,11 @@ export default function ArticleEditor() {
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
-    if (contentRef.current) {
-      setContent(contentRef.current.innerHTML);
-    }
+    // mantém seleção no novo conteúdo
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
   };
 
   return (
@@ -189,22 +194,21 @@ export default function ArticleEditor() {
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
-                {/* Box para escolher tamanho da fonte */}
+                {/* Box de tamanho de fonte */}
                 <div className="flex items-center gap-2 mb-2">
                   <Label>Tamanho da Fonte:</Label>
                   <select
                     className="border rounded px-2 py-1"
                     value={fontSize}
-                    onChange={(e) => {
-                      const size = parseInt(e.target.value);
-                      setFontSize(size);
-                      changeFontSize(size);
-                    }}
+                    onChange={(e) => setFontSize(parseInt(e.target.value))}
                   >
                     {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48].map((s) => (
                       <option key={s} value={s}>{s}px</option>
                     ))}
                   </select>
+                  <Button type="button" onClick={() => changeFontSize(fontSize)}>
+                    Aplicar
+                  </Button>
                 </div>
 
                 {/* Editor de conteúdo */}
@@ -213,10 +217,7 @@ export default function ArticleEditor() {
                   contentEditable
                   className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
                   suppressContentEditableWarning
-                  onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
-                >
-                  <div dangerouslySetInnerHTML={{ __html: content }} />
-                </div>
+                />
               </div>
 
               <div className="flex items-center space-x-2">
