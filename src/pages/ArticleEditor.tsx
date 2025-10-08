@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered } from "lucide-react";
 
 export default function ArticleEditor() {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ export default function ArticleEditor() {
   const [excerpt, setExcerpt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [published, setPublished] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
 
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -47,9 +46,36 @@ export default function ArticleEditor() {
       setPublished(data.published);
 
       if (contentRef.current) {
-        contentRef.current.innerText = data.content || "";
+        contentRef.current.innerHTML = data.content || "";
       }
     }
+  };
+
+  const applyFormat = (command: string, value?: string) => {
+    document.execCommand(command, false, value);
+    contentRef.current?.focus();
+  };
+
+  const changeFontSize = (increase: boolean) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return;
+
+    const span = document.createElement("span");
+    const currentSize = window.getComputedStyle(range.commonAncestorContainer.parentElement || document.body).fontSize;
+    const currentSizePx = parseInt(currentSize);
+    const newSize = increase ? currentSizePx + 2 : Math.max(currentSizePx - 2, 10);
+    
+    span.style.fontSize = `${newSize}px`;
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
+
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
   };
 
   const generateSlug = (text: string) => {
@@ -77,7 +103,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content: contentRef.current?.innerText || "", // SALVA APENAS TEXTO PURO
+        content: contentRef.current?.innerHTML || "",
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -106,31 +132,6 @@ export default function ArticleEditor() {
     }
   };
 
-  // Altera apenas o texto selecionado no editor
-  const changeSelectedFontSize = (size: number) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) return;
-
-    const span = document.createElement("span");
-    span.style.fontSize = `${size}px`;
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
-
-    // Mantém seleção sobre o texto alterado
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.addRange(newRange);
-
-    // Atualiza estado do editor (React)
-    if (contentRef.current) setContent(contentRef.current.innerHTML);
-  };
-
-  // Estado só para trigger React (não salva span)
-  const [content, setContent] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
@@ -196,20 +197,106 @@ export default function ArticleEditor() {
               <div className="space-y-2">
                 <Label htmlFor="content">Conteúdo *</Label>
 
-                {/* Box de tamanho de fonte */}
-                <div className="flex items-center gap-2 mb-2">
-                  <Label>Tamanho da Fonte:</Label>
-                  <select
-                    className="border rounded px-2 py-1"
-                    value={fontSize}
-                    onChange={(e) => setFontSize(parseInt(e.target.value))}
+                {/* Toolbar de Formatação */}
+                <div className="flex items-center gap-1 p-2 border rounded-t bg-muted/50 flex-wrap">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("bold")}
+                    title="Negrito"
                   >
-                    {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48].map((s) => (
-                      <option key={s} value={s}>{s}px</option>
-                    ))}
-                  </select>
-                  <Button type="button" onClick={() => changeSelectedFontSize(fontSize)}>
-                    Aplicar ao Selecionado
+                    <Bold className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("italic")}
+                    title="Itálico"
+                  >
+                    <Italic className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("underline")}
+                    title="Sublinhado"
+                  >
+                    <Underline className="h-4 w-4" />
+                  </Button>
+                  
+                  <div className="w-px h-6 bg-border mx-1" />
+                  
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => changeFontSize(true)}
+                    title="Aumentar Fonte"
+                  >
+                    A+
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => changeFontSize(false)}
+                    title="Diminuir Fonte"
+                  >
+                    A-
+                  </Button>
+                  
+                  <div className="w-px h-6 bg-border mx-1" />
+                  
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("justifyLeft")}
+                    title="Alinhar à Esquerda"
+                  >
+                    <AlignLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("justifyCenter")}
+                    title="Centralizar"
+                  >
+                    <AlignCenter className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("justifyRight")}
+                    title="Alinhar à Direita"
+                  >
+                    <AlignRight className="h-4 w-4" />
+                  </Button>
+                  
+                  <div className="w-px h-6 bg-border mx-1" />
+                  
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("insertUnorderedList")}
+                    title="Lista com Marcadores"
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyFormat("insertOrderedList")}
+                    title="Lista Numerada"
+                  >
+                    <ListOrdered className="h-4 w-4" />
                   </Button>
                 </div>
 
@@ -217,9 +304,8 @@ export default function ArticleEditor() {
                 <div
                   ref={contentRef}
                   contentEditable
-                  className="border rounded p-2 min-h-[300px] focus:outline-none whitespace-pre-wrap break-words"
+                  className="border border-t-0 rounded-b p-4 min-h-[300px] focus:outline-none focus:ring-2 focus:ring-ring"
                   suppressContentEditableWarning
-                  onInput={(e: any) => setContent(e.currentTarget.innerHTML)}
                 />
               </div>
 
