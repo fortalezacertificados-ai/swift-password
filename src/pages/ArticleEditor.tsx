@@ -49,34 +49,8 @@ export default function ArticleEditor() {
       setExcerpt(data.excerpt || "");
       setImageUrl(data.image_url || "");
       setPublished(data.published);
-      if (contentRef.current) contentRef.current.innerHTML = data.content || "";
+      if (contentRef.current) contentRef.current.innerText = data.content || "";
     }
-  };
-
-  const applyFormat = (command: string, value?: string) => {
-    document.execCommand(command, false, value);
-    contentRef.current?.focus();
-  };
-
-  const changeFontSize = (increase: boolean) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) return;
-
-    const span = document.createElement("span");
-    const currentSize = window.getComputedStyle(range.commonAncestorContainer.parentElement || document.body).fontSize;
-    const currentSizePx = parseInt(currentSize);
-    const newSize = increase ? currentSizePx + 2 : Math.max(currentSizePx - 2, 10);
-    span.style.fontSize = `${newSize}px`;
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
-
-    selection.removeAllRanges();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(span);
-    selection.addRange(newRange);
   };
 
   const generateSlug = (text: string) => {
@@ -132,7 +106,7 @@ export default function ArticleEditor() {
         slug,
         author,
         excerpt,
-        content: contentRef.current?.innerHTML || "",
+        content: contentRef.current?.innerText || "", // ← salva texto puro
         image_url: imageUrl || null,
         published,
         created_by: user.id,
@@ -175,6 +149,7 @@ export default function ArticleEditor() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Título */}
               <div className="space-y-2">
                 <Label htmlFor="title">Título *</Label>
                 <Input
@@ -186,6 +161,7 @@ export default function ArticleEditor() {
                 />
               </div>
 
+              {/* Autor */}
               <div className="space-y-2">
                 <Label htmlFor="author">Autor *</Label>
                 <Input
@@ -197,6 +173,7 @@ export default function ArticleEditor() {
                 />
               </div>
 
+              {/* Resumo */}
               <div className="space-y-2">
                 <Label htmlFor="excerpt">Resumo</Label>
                 <Textarea
@@ -208,6 +185,7 @@ export default function ArticleEditor() {
                 />
               </div>
 
+              {/* Imagem */}
               <div className="space-y-2">
                 <Label>Imagem de Capa</Label>
                 <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
@@ -247,38 +225,24 @@ export default function ArticleEditor() {
                 )}
               </div>
 
+              {/* Editor de texto puro */}
               <div className="space-y-2">
                 <Label>Conteúdo *</Label>
-
-                <div className="flex items-center gap-1 p-2 border rounded-t bg-muted/50 flex-wrap">
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("bold")}><Bold className="h-4 w-4" /></Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("italic")}><Italic className="h-4 w-4" /></Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("underline")}><Underline className="h-4 w-4" /></Button>
-                  <div className="w-px h-6 bg-border mx-1" />
-                  <Button type="button" size="sm" variant="outline" onClick={() => changeFontSize(true)}>A+</Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => changeFontSize(false)}>A-</Button>
-                  <div className="w-px h-6 bg-border mx-1" />
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("justifyLeft")}><AlignLeft className="h-4 w-4" /></Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("justifyCenter")}><AlignCenter className="h-4 w-4" /></Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("justifyRight")}><AlignRight className="h-4 w-4" /></Button>
-                  <div className="w-px h-6 bg-border mx-1" />
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("insertUnorderedList")}><List className="h-4 w-4" /></Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("insertOrderedList")}><ListOrdered className="h-4 w-4" /></Button>
-                </div>
-
                 <div
                   ref={contentRef}
                   contentEditable
-                  className="border border-t-0 rounded-b p-4 min-h-[300px] focus:outline-none focus:ring-2 focus:ring-ring bg-background"
+                  className="border rounded p-4 min-h-[300px] focus:outline-none focus:ring-2 focus:ring-ring bg-background whitespace-pre-wrap"
                   suppressContentEditableWarning
                 />
               </div>
 
+              {/* Publicar */}
               <div className="flex items-center space-x-2">
                 <Switch id="published" checked={published} onCheckedChange={setPublished} />
                 <Label htmlFor="published">Publicar artigo</Label>
               </div>
 
+              {/* Botões */}
               <div className="flex gap-4">
                 <Button type="submit" disabled={loading}>
                   {loading ? "Salvando..." : "Salvar Artigo"}
