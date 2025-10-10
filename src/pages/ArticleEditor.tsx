@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { 
-  ArrowLeft, Bold, Italic, Underline, 
-  AlignLeft, AlignCenter, AlignRight, 
-  List, ListOrdered, Upload 
+import {
+  ArrowLeft, Bold, Italic, Underline,
+  AlignLeft, AlignCenter, AlignRight,
+  List, ListOrdered, Upload
 } from "lucide-react";
 
 export default function ArticleEditor() {
@@ -97,7 +97,6 @@ export default function ArticleEditor() {
 
       setUploading(true);
 
-      // Gera nome único
       const fileExt = file.name.split(".").pop();
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `articles/${fileName}`;
@@ -176,8 +175,6 @@ export default function ArticleEditor() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              
-              {/* Título */}
               <div className="space-y-2">
                 <Label htmlFor="title">Título *</Label>
                 <Input
@@ -189,7 +186,6 @@ export default function ArticleEditor() {
                 />
               </div>
 
-              {/* Autor */}
               <div className="space-y-2">
                 <Label htmlFor="author">Autor *</Label>
                 <Input
@@ -201,7 +197,6 @@ export default function ArticleEditor() {
                 />
               </div>
 
-              {/* Resumo */}
               <div className="space-y-2">
                 <Label htmlFor="excerpt">Resumo</Label>
                 <Textarea
@@ -213,7 +208,6 @@ export default function ArticleEditor() {
                 />
               </div>
 
-              {/* Imagem */}
               <div className="space-y-2">
                 <Label>Imagem de Capa</Label>
                 <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
@@ -253,11 +247,9 @@ export default function ArticleEditor() {
                 )}
               </div>
 
-              {/* Editor */}
               <div className="space-y-2">
                 <Label>Conteúdo *</Label>
 
-                {/* Toolbar */}
                 <div className="flex items-center gap-1 p-2 border rounded-t bg-muted/50 flex-wrap">
                   <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("bold")}><Bold className="h-4 w-4" /></Button>
                   <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("italic")}><Italic className="h-4 w-4" /></Button>
@@ -274,7 +266,6 @@ export default function ArticleEditor() {
                   <Button type="button" size="sm" variant="outline" onClick={() => applyFormat("insertOrderedList")}><ListOrdered className="h-4 w-4" /></Button>
                 </div>
 
-                {/* Área editável */}
                 <div
                   ref={contentRef}
                   contentEditable
@@ -283,13 +274,11 @@ export default function ArticleEditor() {
                 />
               </div>
 
-              {/* Publicar */}
               <div className="flex items-center space-x-2">
                 <Switch id="published" checked={published} onCheckedChange={setPublished} />
                 <Label htmlFor="published">Publicar artigo</Label>
               </div>
 
-              {/* Botões */}
               <div className="flex gap-4">
                 <Button type="submit" disabled={loading}>
                   {loading ? "Salvando..." : "Salvar Artigo"}
